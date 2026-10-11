@@ -9,7 +9,7 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: "PAPER"
-      VERSION: "1.21"
+      VERSION: "26.3"
       # 4G requiere que WSL tenga >5GB (ver .wslconfig); la VM actual tiene ~3.4GB
       MEMORY: "2G"
       BUILD_OPTIMIZE: "TRUE"

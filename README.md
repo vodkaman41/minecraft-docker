@@ -1,6 +1,6 @@
 # minecraft-docker
 
-Servidor PaperMC 1.21 (`itzg/minecraft-server`) + túnel Playit.gg con Docker Compose.
+Servidor PaperMC 26.3 (`itzg/minecraft-server`) + túnel Playit.gg con Docker Compose.
 
 ## Uso
 
