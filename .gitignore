@@ -1,0 +1,12 @@
+# Secretos y estado local
+.env
+playit-data/
+
+# Del directorio data/ solo se versiona la configuración del servidor
+data/*
+!data/bukkit.yml
+!data/spigot.yml
+!data/config/
+data/config/*
+!data/config/paper-global.yml
+!data/config/paper-world-defaults.yml

@@ -1,0 +1,41 @@
+services:
+  mc-server:
+    image: itzg/minecraft-server:latest
+    container_name: mc_paper_server
+    tty: true
+    stdin_open: true
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "1.21"
+      # 4G requiere que WSL tenga >5GB (ver .wslconfig); la VM actual tiene ~3.4GB
+      MEMORY: "2G"
+      BUILD_OPTIMIZE: "TRUE"
+      # Aikar's flags (G1GC tuned for Minecraft); -Xms/-Xmx come from MEMORY
+      JVM_OPTS: >-
+        -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200
+        -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch
+        -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M
+        -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4
+        -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90
+        -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32
+        -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1
+        -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+
+  playit:
+    image: ghcr.io/playit-cloud/playit-agent:latest
+    container_name: mc_playit_agent
+    network_mode: "service:mc-server"
+    depends_on:
+      - mc-server
+    environment:
+      # Secret del agente: playit.gg -> Agents -> Add agent -> Docker
+      SECRET_KEY: ${PLAYIT_SECRET_KEY}
+    volumes:
+      - ./playit-data:/etc/playit
+    restart: unless-stopped
